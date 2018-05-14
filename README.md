@@ -67,4 +67,4 @@
 
 ## LICENSE
 
-[GPL](https://github.com/Loyalsoldier/FEThesis/blob/master/LICENSE)
+[GPL](https://gitlab.com/LimonStudio/ZQ-Graduation-Design/2018-zhangchao-Nodejs-based-CITMS-chendongdong/blob/master/LICENSE)
