@@ -22,6 +22,7 @@
 1. [致谢](./07-致谢.md)
 1. [参考文献](./08-参考文献.md)
 1. [附录](./09-附录.md)
+1. [PPT](https://github.com/Lanseria/Nodejs-based-CITMS/releases/download/v0.1/show.pptx)
 
 ## 毕业论文（设计）的构成
 
