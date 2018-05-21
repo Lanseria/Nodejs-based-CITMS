@@ -13,7 +13,7 @@
 ## 立即阅读
 
 1. ⭕[摘要与关键词](./00-摘要与关键词.md)
-1. ⭕[目录](./01-目录.md)
+1. ⭕[目录](./1-目录.md)
 1. ⭕[绪论](./02-绪论.md)
 1. ⭕[系统分析](./03-系统分析.md)
 1. ⭕[系统设计](./04-系统设计.md)
@@ -29,6 +29,20 @@
 - ⭕ 已完成
 - ❌ 未完成
 - Null 终结稿
+
+## Build PDF USE pandoc
+
+```
+# install package
+sudo apt install pandoc
+sudo apt install texlive-xetex
+# show installed fonts
+fc-list -f "%{family}\n"  :lang=zh
+# build except context
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
+# or docx
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
+
 
 ## 毕业论文（设计）的构成
 
