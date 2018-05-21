@@ -14,13 +14,13 @@
 
 1. ⭕[摘要与关键词](./00-摘要与关键词.md)
 1. ⭕[目录](./1-目录.md)
-1. ⭕[绪论](./02-绪论.md)
-1. ⭕[系统分析](./03-系统分析.md)
-1. ⭕[系统设计](./04-系统设计.md)
-1. ❌[系统实现](./05-系统实现.md)
-1. ⭕[致谢](./06-致谢.md)
-1. ⭕[参考文献](./07-参考文献.md)
-1. ⭕[附录](./08-附录.md)
+1. ⭕[绪论](./01-绪论.md)
+1. ⭕[系统分析](./02-系统分析.md)
+1. ⭕[系统设计](./03-系统设计.md)
+1. ❌[系统实现](./04-系统实现.md)
+1. ⭕[致谢](./05-致谢.md)
+1. ⭕[参考文献](./06-参考文献.md)
+1. ⭕[附录](./07-附录.md)
 1. ⭕[PPT](https://github.com/Lanseria/Nodejs-based-CITMS/releases/download/v0.1/show.pptx)
 1. ⭕[视频](https://www.bilibili.com/video/av23434110/)
 
@@ -32,7 +32,7 @@
 
 ## Build PDF USE pandoc
 
-```
+``` bash
 # install package
 sudo apt install pandoc
 sudo apt install texlive-xetex
@@ -42,7 +42,12 @@ fc-list -f "%{family}\n"  :lang=zh
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
 # or docx
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
+```
 
+命令行有两个最关键参数
+`--latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V`
+
+没有这个参数，`pandoc` 显示不了中文，一个是指定 `LaTeX` 的渲染引擎，一个指定中文字体，你可以根据自己系统安装的字体来设置，其他的几个参数是锦上添花的东西，不是必须，只是我比较喜欢带书签的 `PDF` ，所以就加上了 `--toc` ，也喜欢大纲标题上带上自动分配的序列号，例如1 1.1 1.1.1……，所以也加上了-N选项。
 
 ## 毕业论文（设计）的构成
 
