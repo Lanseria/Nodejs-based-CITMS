@@ -39,13 +39,13 @@ sudo apt install texlive-xetex
 # show installed fonts
 fc-list -f "%{family}\n"  :lang=zh
 # build except context
-pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono CJK SC' -V mainfont='Noto Sans Mono CJK SC' -V geometry:margin=1in 0*.md  -o output.pdf
 # or docx
-pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V mainfont='NotoSans' -V geometry:margin=1in 0*.md  -o output.pdf
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono CJK SC' -V mainfont='Noto Sans Mono CJK SC' -V geometry:margin=1in 0*.md  -o output.docx
 ```
 
 命令行有两个最关键参数
-`--latex-engine=xelatex -V CJKmainfont='NotoSansCJK' -V`
+`--latex-engine=xelatex -V CJKmainfont='Noto Sans Mono CJK SC' -V`
 
 没有这个参数，`pandoc` 显示不了中文，一个是指定 `LaTeX` 的渲染引擎，一个指定中文字体，你可以根据自己系统安装的字体来设置，其他的几个参数是锦上添花的东西，不是必须，只是我比较喜欢带书签的 `PDF` ，所以就加上了 `--toc` ，也喜欢大纲标题上带上自动分配的序列号，例如1 1.1 1.1.1……，所以也加上了-N选项。
 
