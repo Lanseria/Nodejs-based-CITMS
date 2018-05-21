@@ -42,6 +42,10 @@ fc-list -f "%{family}\n"  :lang=zh
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono CJK SC' -V mainfont='Noto Sans Mono CJK SC' -V geometry:margin=1in 0*.md  -o output.pdf
 # or docx
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono CJK SC' -V mainfont='Noto Sans Mono CJK SC' -V geometry:margin=1in 0*.md  -o output.docx
+# build except context
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.pdf
+# or docx
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.docx
 ```
 
 命令行有两个最关键参数
