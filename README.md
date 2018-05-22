@@ -46,6 +46,8 @@ pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.pdf
 # or docx
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.docx
+# use tex
+pandoc --template=template.tex --latex-engine=xelatex 0*.md  -o output.pdf
 ```
 
 命令行有两个最关键参数
