@@ -45,9 +45,9 @@ pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Noto Sans Mono
 # build except context
 pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.pdf
 # or docx
-pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='Microsoft YaHei UI' -V mainfont='Microsoft YaHei UI' -V geometry:margin=1in 0*.md  -o output.docx
+pandoc -N -s --toc --smart --latex-engine=xelatex -V CJKmainfont='宋体' -V mainfont='Times New Roman' -V geometry:margin=1in 0*.md  -o output.docx
 # use tex
-pandoc --template=template.tex --latex-engine=xelatex 0*.md  -o output.pdf
+pandoc --template=template.tex --toc --latex-engine=xelatex 0*.md  -o output.docx
 ```
 
 命令行有两个最关键参数

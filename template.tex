@@ -24,11 +24,11 @@ $endif$
 \else % if luatex or xelatex
   \usepackage{fontspec}     % 允許設定字體
   \usepackage{xeCJK}        % 分開設置中英文字型
-  \setCJKmainfont{Microsoft YaHei UI}   % 設定中文字型
-  \setmainfont{Microsoft YaHei UI}     % 設定英文字型
-  \setromanfont{Microsoft YaHei UI}    % 字型
-  \setmonofont{Microsoft YaHei UI}
-  \linespread{1.2}\selectfont   % 行距
+  \setCJKmainfont{宋体}   % 設定中文字型
+  \setmainfont{Times New Roman}     % 設定英文字型
+  \setromanfont{Times New Roman}    % 字型
+  \setmonofont{Times New Roman}
+  \linespread{1.5}\selectfont   % 行距
   \XeTeXlinebreaklocale "zh"    % 針對中文自動換行
   \XeTeXlinebreakskip = 0pt plus 1pt % 字與字之間加入0pt至1pt的間距，確保左右對整齊
   \parindent 0em        % 段落縮進
@@ -122,9 +122,9 @@ $endif$
 %\setlength{\parskip}{6pt plus 2pt minus 1pt}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 
-\title{\huge 基于REST服务的最小物联网系统设计} % 設置標題，使用巨大字體
-\author{Phodal Huang}       % 設置作者
-\date{February 2014}        % 設置日期
+\title{\huge 基于Nodejs的社团集成工具式管理系统} % 設置標題，使用巨大字體
+\author{张超}       % 設置作者
+\date{May 2018}        % 設置日期
 \usepackage{titling}
 \setlength{\droptitle}{-8em}    % 將標題移動至頁面的上面
 
@@ -216,7 +216,7 @@ $endif$
 \setlength{\textheight}{24.00cm}    % 24.62
 
 %%%% 下面的命令设置行间距与段落间距 %%%%
-\linespread{1.4}
+\linespread{1.5}
 % \setlength{\parskip}{1ex}
 \setlength{\parskip}{0.5\baselineskip}
 
