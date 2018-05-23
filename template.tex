@@ -8,243 +8,102 @@
   headheight=3ex,
   headsep=2ex
 }
-\usepackage{tabu}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
-\usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
-% use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[utf8]{inputenc}
-$if(euro)$
-  \usepackage{eurosym}
-$endif$
-\else % if luatex or xelatex
-  \usepackage{fontspec}     % 允許設定字體
-  \usepackage{xeCJK}        % 分開設置中英文字型
-  \setCJKmainfont{宋体}   % 設定中文字型
-  \setmainfont{Times New Roman}     % 設定英文字型
-  \setromanfont{Times New Roman}    % 字型
-  \setmonofont{Times New Roman}
-  \linespread{1.5}\selectfont   % 行距
-  \XeTeXlinebreaklocale "zh"    % 針對中文自動換行
-  \XeTeXlinebreakskip = 0pt plus 1pt % 字與字之間加入0pt至1pt的間距，確保左右對整齊
-  \parindent 0em        % 段落縮進
-  \setlength{\parskip}{0pt}    % 段落之間的距離
-  \ifxetex
-    \usepackage{xltxtra,xunicode}
-  \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
-$if(mainfont)$
-    \setmainfont{$mainfont$}
-$endif$
-$if(sansfont)$
-    \setsansfont{$sansfont$}
-$endif$
-$if(monofont)$
-    \setmonofont{$monofont$}
-$endif$
-$if(mathfont)$
-    \setmathfont{$mathfont$}
-$endif$
-\fi
-% use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
-$if(geometry)$
-\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
-$endif$
-$if(natbib)$
-\usepackage{natbib}
-\bibliographystyle{plainnat}
-$endif$
-$if(biblatex)$
-\usepackage{biblatex}
-$if(biblio-files)$
-\bibliography{$biblio-files$}
-$endif$
-$endif$
-$if(listings)$
-\usepackage{listings}
-$endif$
-$if(lhs)$
-\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
-$endif$
-$if(highlighting-macros)$
-$highlighting-macros$
-$endif$
-$if(verbatim-in-note)$
-\usepackage{fancyvrb}
-$endif$
-$if(tables)$
-\usepackage{longtable}
-$endif$
+\usepackage{graphicx}%插图宏集  
+\usepackage{titletoc}%要调整章节标题在目录页中的格式，可以用titletoc宏包 title of contents 
+\usepackage{titlesec} %其中 center 可使标题居中,还可设为 raggedleft (居左，默认),
+\usepackage{fontspec, xunicode, xltxtra} 
+\usepackage{fontspec}     % 允許設定字體
+\usepackage{xeCJK}        % 分開設置中英文字型
+\setmainfont{Times New Roman}
+\setCJKmainfont[ItalicFont={楷体_GB2312}, BoldFont={黑体}]{宋体}% 設定中文字型
+\setCJKsansfont{黑体}
+\setCJKmonofont{仿宋_GB2312}
+\linespread{1.5}   % 行距
 
-\usepackage{graphicx}
-% We will generate all images so they have a width \maxwidth. This means
-% that they will get their normal width if they fit onto the page, but
-% are scaled down if they would overflow the margins.
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
-\else\Gin@nat@width\fi}
-\makeatother
-\let\Oldincludegraphics\includegraphics
-\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
-
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
-\hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={$author-meta$},
-            pdftitle={$title-meta$},
-            colorlinks=true,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
-            pdfborder={0 0 0}}
-\urlstyle{same}  % don't use monospace font for urls
-$if(links-as-notes)$
-% Make links footnotes instead of hotlinks:
-\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
-$endif$
-$if(strikeout)$
-\usepackage[normalem]{ulem}
-% avoid problems with \sout in headers with hyperref:
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
-$endif$
-\setlength{\parindent}{0pt}
-%\setlength{\parskip}{6pt plus 2pt minus 1pt}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-
-\title{\huge 基于Nodejs的社团集成工具式管理系统} % 設置標題，使用巨大字體
-\author{张超}       % 設置作者
-\date{May 2018}        % 設置日期
-\usepackage{titling}
-\setlength{\droptitle}{-8em}    % 將標題移動至頁面的上面
-
-\usepackage{fancyhdr}
-\usepackage{lastpage}
-\pagestyle{fancyplain}
-
-$if(numbersections)$
-\setcounter{secnumdepth}{5}
-$else$
-\setcounter{secnumdepth}{0}
-$endif$
-$if(verbatim-in-note)$
-\VerbatimFootnotes % allows verbatim text in footnotes
-$endif$
-$if(lang)$
-\ifxetex
-  \usepackage{polyglossia}
-  \setmainlanguage{$mainlang$}
-\else
-  \usepackage[$lang$]{babel}
-\fi
-$endif$
-$for(header-includes)$
-$header-includes$
-$endfor$
-
-$if(title)$
-\title{$title$}
-$endif$
-\author{$for(author)$$author$$sep$ \and $endfor$}
-\date{$date$}
-
-\newcommand{\tightlist}{%
-\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}
-}
-
-%%%%%% 设置字号 %%%%%%
-\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}
-\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont}
-\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}
-\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}
-\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
-\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}
-\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
-\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
-\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
-\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
-\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}
-\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}
-
-%%%% 设置 section 属性 %%%%
-\makeatletter
-\renewcommand\section{\@startsection{section}{1}{\z@}%
-{-1.5ex \@plus -.5ex \@minus -.2ex}%
-{.5ex \@plus .1ex}%
-{\normalfont\sihao\CJKfamily{STHeiti}}}
-\makeatother
-
-%%%% 设置 subsection 属性 %%%%
-\makeatletter
-\renewcommand\subsection{\@startsection{subsection}{1}{\z@}%
-{-1.25ex \@plus -.5ex \@minus -.2ex}%
-{.4ex \@plus .1ex}%
-{\normalfont\xiaosihao\CJKfamily{STHeiti}}}
-\makeatother
-
-%%%% 设置 subsubsection 属性 %%%%
-\makeatletter
-\renewcommand\subsubsection{\@startsection{subsubsection}{1}{\z@}%
-{-1ex \@plus -.5ex \@minus -.2ex}%
-{.3ex \@plus .1ex}%
-{\normalfont\xiaosihao\CJKfamily{STHeiti}}}
-\makeatother
-
-%%%% 段落首行缩进两个字 %%%%
-\makeatletter
-\let\@afterindentfalse\@afterindenttrue
-\@afterindenttrue
-\makeatother
-\setlength{\parindent}{2em}  %中文缩进两个汉字位
-
-
-%%%% 下面的命令重定义页面边距，使其符合中文刊物习惯 %%%%
-\addtolength{\topmargin}{-2pt}
-\setlength{\oddsidemargin}{0.63cm}  % 3.17cm - 1 inch
-\setlength{\evensidemargin}{\oddsidemargin}
-\setlength{\textwidth}{14.66cm}
-\setlength{\textheight}{24.00cm}    % 24.62
-
-%%%% 下面的命令设置行间距与段落间距 %%%%
-\linespread{1.5}
-% \setlength{\parskip}{1ex}
-\setlength{\parskip}{0.5\baselineskip}
-
-
-\begin{document}
-%%%% 定理类环境的定义 %%%%
-\newtheorem{example}{例}             % 整体编号
-\newtheorem{algorithm}{算法}
-\newtheorem{theorem}{定理}[section]  % 按 section 编号
-\newtheorem{definition}{定义}
-\newtheorem{axiom}{公理}
-\newtheorem{property}{性质}
-\newtheorem{proposition}{命题}
-\newtheorem{lemma}{引理}
-\newtheorem{corollary}{推论}
-\newtheorem{remark}{注解}
-\newtheorem{condition}{条件}
-\newtheorem{conclusion}{结论}
-\newtheorem{assumption}{假设}
-
-%%%% 重定义 %%%%
-\renewcommand{\contentsname}{目录}  % 将Contents改为目录
-\renewcommand{\abstractname}{摘要}  % 将Abstract改为摘要
-\renewcommand{\refname}{参考文献}   % 将References改为参考文献
-\renewcommand{\indexname}{索引}
-\renewcommand{\figurename}{图}
-\renewcommand{\tablename}{表}
-\renewcommand{\appendixname}{附录}
+%-----------------------xeCJK下设置中文字体------------------------------%  
+\setCJKfamilyfont{song}{SimSun}                             %宋体 song  
+\newcommand{\song}{\CJKfamily{song}}                        % 宋体   (Windows自带simsun.ttf)  
+\setCJKfamilyfont{xs}{NSimSun}                              %新宋体 xs  
+\newcommand{\xs}{\CJKfamily{xs}}  
+\setCJKfamilyfont{fs}{FangSong_GB2312}                      %仿宋2312 fs  
+\newcommand{\fs}{\CJKfamily{fs}}                            %仿宋体 (Windows自带simfs.ttf)  
+\setCJKfamilyfont{kai}{KaiTi_GB2312}                        %楷体2312  kai  
+\newcommand{\kai}{\CJKfamily{kai}}                            
+\setCJKfamilyfont{yh}{Microsoft YaHei}                    %微软雅黑 yh  
+\newcommand{\yh}{\CJKfamily{yh}}  
+\setCJKfamilyfont{hei}{SimHei}                                    %黑体  hei  
+\newcommand{\hei}{\CJKfamily{hei}}                          % 黑体   (Windows自带simhei.ttf)  
+\setCJKfamilyfont{msunicode}{Arial Unicode MS}            %Arial Unicode MS: msunicode  
+\newcommand{\msunicode}{\CJKfamily{msunicode}}  
+\setCJKfamilyfont{li}{LiSu}                                            %隶书  li  
+\newcommand{\li}{\CJKfamily{li}}  
+\setCJKfamilyfont{yy}{YouYuan}                             %幼圆  yy  
+\newcommand{\yy}{\CJKfamily{yy}}  
+\setCJKfamilyfont{xm}{MingLiU}                                        %细明体  xm  
+\newcommand{\xm}{\CJKfamily{xm}}  
+\setCJKfamilyfont{xxm}{PMingLiU}                             %新细明体  xxm  
+\newcommand{\xxm}{\CJKfamily{xxm}}  
+  
+\setCJKfamilyfont{hwsong}{STSong}                            %华文宋体  hwsong  
+\newcommand{\hwsong}{\CJKfamily{hwsong}}  
+\setCJKfamilyfont{hwzs}{STZhongsong}                        %华文中宋  hwzs  
+\newcommand{\hwzs}{\CJKfamily{hwzs}}  
+\setCJKfamilyfont{hwfs}{STFangsong}                            %华文仿宋  hwfs  
+\newcommand{\hwfs}{\CJKfamily{hwfs}}  
+\setCJKfamilyfont{hwxh}{STXihei}                                %华文细黑  hwxh  
+\newcommand{\hwxh}{\CJKfamily{hwxh}}  
+\setCJKfamilyfont{hwl}{STLiti}                                        %华文隶书  hwl  
+\newcommand{\hwl}{\CJKfamily{hwl}}  
+\setCJKfamilyfont{hwxw}{STXinwei}                                %华文新魏  hwxw  
+\newcommand{\hwxw}{\CJKfamily{hwxw}}  
+\setCJKfamilyfont{hwk}{STKaiti}                                    %华文楷体  hwk  
+\newcommand{\hwk}{\CJKfamily{hwk}}  
+\setCJKfamilyfont{hwxk}{STXingkai}                            %华文行楷  hwxk  
+\newcommand{\hwxk}{\CJKfamily{hwxk}}  
+\setCJKfamilyfont{hwcy}{STCaiyun}                                 %华文彩云 hwcy  
+\newcommand{\hwcy}{\CJKfamily{hwcy}}  
+\setCJKfamilyfont{hwhp}{STHupo}                                 %华文琥珀   hwhp  
+\newcommand{\hwhp}{\CJKfamily{hwhp}}  
+  
+\setCJKfamilyfont{fzsong}{Simsun (Founder Extended)}     %方正宋体超大字符集   fzsong  
+\newcommand{\fzsong}{\CJKfamily{fzsong}}  
+\setCJKfamilyfont{fzyao}{FZYaoTi}                                    %方正姚体  fzy  
+\newcommand{\fzyao}{\CJKfamily{fzyao}}  
+\setCJKfamilyfont{fzshu}{FZShuTi}                                    %方正舒体 fzshu  
+\newcommand{\fzshu}{\CJKfamily{fzshu}}  
+  
+\setCJKfamilyfont{asong}{Adobe Song Std}                        %Adobe 宋体  asong  
+\newcommand{\asong}{\CJKfamily{asong}}  
+\setCJKfamilyfont{ahei}{Adobe Heiti Std}                            %Adobe 黑体  ahei  
+\newcommand{\ahei}{\CJKfamily{ahei}}  
+\setCJKfamilyfont{akai}{Adobe Kaiti Std}                            %Adobe 楷体  akai  
+\newcommand{\akai}{\CJKfamily{akai}}  
+  
+%------------------------------设置字体大小------------------------%  
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     %初号  
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} %小初号  
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      %一号  
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      %二号  
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  %小二号  
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  %三号  
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}%     四号  
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  %小四号  
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    %五号  
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   %小五号  
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  %六号  
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    %七号  
+%------------------------------标题名称中文化-----------------------------%  
+\renewcommand\abstractname{\hei 摘\ 要}  
+\renewcommand\refname{\hei 参考文献}  
+\renewcommand\figurename{\hei 图}  
+\renewcommand\tablename{\hei 表}  
+%------------------------------定理名称中文化-----------------------------%  
+\newtheorem{dingyi}{\hei 定义~}[section]  
+\newtheorem{dingli}{\hei 定理~}[section]  
+\newtheorem{yinli}[dingli]{\hei 引理~}  
+\newtheorem{tuilun}[dingli]{\hei 推论~}  
+\newtheorem{mingti}[dingli]{\hei 命题~}  
+\newtheorem{lizi}{{例}}  
 
 \maketitle
 
