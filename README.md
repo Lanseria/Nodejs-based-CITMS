@@ -55,6 +55,20 @@ pandoc --template=template.tex --toc --latex-engine=xelatex 0*.md  -o output.doc
 
 没有这个参数，`pandoc` 显示不了中文，一个是指定 `LaTeX` 的渲染引擎，一个指定中文字体，你可以根据自己系统安装的字体来设置，其他的几个参数是锦上添花的东西，不是必须，只是我比较喜欢带书签的 `PDF` ，所以就加上了 `--toc` ，也喜欢大纲标题上带上自动分配的序列号，例如1 1.1 1.1.1……，所以也加上了-N选项。
 
+## 内置了 latex 郑州轻工业学院论文格式
+
+`laTeX/` 文件夹里，差不多一样，需要稍加修改
+
+```
+# 需要安装xelatex
+# 最好在linux下安装
+# 包文件很大,最好使用国内清华镜像
+# sudo apt install texlive-xetex
+$ make thesis
+```
+
+[模板论文下载](https://github.com/Lanseria/Nodejs-based-CITMS/releases/download/v0.2/main.pdf)
+
 ## 毕业论文（设计）的构成
 
 根据我院各专业的特点，毕业论文（设计）文体结构可分为三类：
