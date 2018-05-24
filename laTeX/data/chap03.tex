@@ -5,11 +5,11 @@
 %% Created: 2012-04-27 19:47
 %% Last modified: 2016-09-02 21:31
 %%================================================
-\chapter{第三章 系统设计}
-\label{cha:usage}
+\chapter{系统设计}
+\label{cha:system-design}
 
 \section{系统布局}
-\label{sec:requirements}
+\label{sec:system-layout}
 
 考虑到本系统的复杂性，与基于每个社团的需求不一，所以将每个系统单独出来，各个完成。如有些社团仅需要报名与值班系统，我只要为你部署这两个系统即可，数据通过 CSV 表格形式进行人为传输。确保数据的可靠性与流动性。其次考虑到每个系统环境不一样，所以利用简单的 Docker 配置，可以一次性的安装多个系统。方便一些操作人员操作。
 
@@ -23,12 +23,13 @@
 \end{itemize}
 
 \section{技术选型}
-\label{sec:requirements}
+\label{sec:technical-selection}
 
 \subsection{ThinkPHP3.2 框架}
-\label{sec:requirements}
 
-ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend 等大型框架，ThinkPHP 框架属于轻量型框架，没有什么特殊模块要求，底层运行的内容消耗也很低，不会出现空间和内存占用的瓶颈。并且它支持 Mysql、MsSQL、PgSQL、Sqlite、Oracle、Ibase、Mongo以及PDO等多种数据库和连接。对于这种一般型的项目足以。
+ThinkPHP
+\cite{thinkphp}
+ 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend 等大型框架，ThinkPHP 框架属于轻量型框架，没有什么特殊模块要求，底层运行的内容消耗也很低，不会出现空间和内存占用的瓶颈。并且它支持 Mysql、MsSQL、PgSQL、Sqlite、Oracle、Ibase、Mongo以及PDO等多种数据库和连接。对于这种一般型的项目足以。
 
 \subsubsection*{项目后端的搭建}
 
@@ -79,7 +80,6 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 本项目主要有活动活动的创建与 excel 导出功能，其次有对活动时间的控制，可以对活动进行修改，富文本的编辑与操作。
 
 \subsubsection{考核系统}
-\label{sec:requirements}
 
 \subsubsection*{设计}
 
@@ -102,6 +102,7 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 \subsubsection*{详细功能}
 
 本项目主要由试卷 exam 和文章 article 两大模型
+
 \begin{itemize}
   \item 其中具有重要特色的功能是对试卷的添加与编辑和批改等功能
   \item 其次在克服试卷的模型上我们做了很多尝试，最后用了稳定而不易出错的 thinkphp 自带关联模型
@@ -111,11 +112,11 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
   \item 对用户的权限处理
 \end{itemize}
 
-\subsection{Express 与 Pug 框架}
+\subsection{Express与Pug框架}
 
 \subsubsection*{项目后端的搭建}
 \begin{itemize}
-  \item 使用 NodeJs 的 express 框架完成网站后端搭建
+  \item 使用NodeJs\cite{wilson2018node}的express\cite{mardan2014express}框架完成网站后端搭建
   \item 使用 mongodb 完成数据存储，通过 mongoose 模块完成对 mongodb 数据的构建使用 pug 模板引擎完成页面创建渲染
   \item 使用 Moment.js 格式化电影存储时间
   \item 利用 alibaba.aliqin.fc.sms.num.send（短信发送）收费API作为发短信支持
@@ -132,7 +133,6 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 \end{itemize}
 
 \subsubsection{短信群发平台}
-\label{sec:requirements}
 
 \subsubsection*{设计}
 
@@ -170,7 +170,6 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 \end{itemize}
 
 \subsubsection{排值班系统}
-\label{sec:requirements}
 
 \subsubsection*{设计}
 
@@ -188,7 +187,6 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 排值班系统是一套集成C/C++暴力算法排序的，集成 xlsx 的导入与导出制作的一套系统。通过人编写的算法，对成员的值班表进行进行智能的分析，以不重复安排一个人的前提下，尽量将每个成员分配上去，以保证公平，公正。但是最主要的是减少人工排课的工作量，方便管理员的导入导出与使用。
 
 \subsubsection{学习平台}
-\label{sec:requirements}
 
 \subsubsection*{设计}
 
@@ -221,10 +219,8 @@ ThinkPHP 是以 PHP 为底层的框架。相较于其他 Laravel，Yii，Zend �
 \end{itemize}
 
 \subsection{Vue 与 Koa 前后端分离}
-\label{sec:requirements}
 
 \subsubsection{邮件发送平台}
-\label{sec:requirements}
 
 \subsubsection*{设计}
 

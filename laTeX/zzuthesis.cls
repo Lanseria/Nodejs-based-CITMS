@@ -463,48 +463,32 @@
   \thispagestyle{zzu@empty}
   \begin{center}
     \ifzzu@bachelor%%本科毕业论文
-      \vspace*{1cm}
+      \vspace*{0.4cm}
       {\erhao\bfseries\song\zzu@schoolname}
-      \par\vskip2.4cm
-      \hspace*{1cm}
-      {\xiaochu\bfseries\xingkai\zzu@subtitle}
-      \par\vskip2.4cm
-      \hspace*{1cm}\sffamily\sanhao\zzu@bachelor@title@pre\zzu@title@sep
-      \parbox[t]{10cm}{%
-        \setbox0=\hbox{{\sanhao[1.55]\zzu@ctitle}}
-        \begin{picture}(0,0)(0,0)
-          \setlength\unitlength{1cm}
-          \linethickness{.5\p@}
-          \put(0,-0.25){\line(1,0){10}}
-          \ifdim\wd0>10cm
-            \put(0,-1.12){\line(1,0){10}}
-          \fi
-        \end{picture}%
-        \ignorespaces\sanhao[1.55]\zzu@ctitle\par
-        \setbox0=\hbox{{\sanhao[1.55]\zzu@etitle}}
-        \vskip.5cm
-        \setlength{\zzu@title@width}{2.8cm}
-        \zzu@put@title{\zzu@supervisor@title\zzu@title@sep}%
-          \zzu@underline[3cm]{\hfill\zzu@csupervisor\hfill}\hfill
-        \setlength{\zzu@title@width}{1.8cm}
-        \zzu@put@title{\zzu@protitle@title\zzu@title@sep}%
-          \zzu@underline[2cm]{\hfill\zzu@protitle\hfill}}\par
-        \vspace*{\stretch{1}}
-        \hspace*{0.8cm}\parbox[t][4.0cm][t]{22em}{{\xiaosan[1.8]\rmfamily
-          \setlength{\zzu@title@width}{4em}
-          \zzu@put@title{\zzu@author@title}\zzu@title@sep%
-            \zzu@underline[6em]{\zzu@cauthor}\hspace*{8bp}
-          \zzu@stuno@title\zzu@title@sep\zzu@underline[8em]{\zzu@stuno}\par
-          \zzu@put@title{\zzu@major@title}\zzu@title@sep%
-            \zzu@underline[18em]{\zzu@cmajor}\par
-          \zzu@put@title{\zzu@department@title}\zzu@title@sep%
-            \zzu@underline[18em]{\zzu@cdepartment}\par
-          \zzu@put@title{\zzu@cdate@title}\zzu@title@sep%
-            \zzu@underline[18em]{\zzu@cdate}\par}}
-        \vspace*{\stretch{1}}
-        % \begin{center}
-          % {\xiaosan\rmfamily\zzu@submitdate}
-        % \end{center}
+      \par\vskip0.5cm
+      {\xiaochu\xingkai\zzu@subtitle}
+      \par\vskip4cm
+      \vspace*{\stretch{1}}
+      \parbox[t][4.0cm][t]{22em}{{\xiaosan[1.8]\rmfamily
+        \setlength{\zzu@title@width}{4em}
+        \zzu@put@title{\zzu@bachelor@title@pre}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@ctitle}\par
+        \zzu@put@title{\zzu@author@title}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@cauthor}\par
+        \zzu@put@title{\zzu@major@title}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@cmajor}\par
+        \zzu@put@title{\zzu@stuno@title}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@stuno}\par
+        \zzu@put@title{\zzu@department@title}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@cdepartment}\par
+        \zzu@put@title{\zzu@supervisor@title（\zzu@protitle@title）}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@csupervisor（\zzu@protitle}\par
+        \zzu@put@title{\zzu@cdate@title}\zzu@title@sep%
+          \zzu@underline[18em]{\zzu@cdate}\par}}
+      \vspace*{\stretch{1}}
+      % \begin{center}
+        % {\xiaosan\rmfamily\zzu@submitdate}
+      % \end{center}
     \else%研究生学位论文
       \noindent\begin{minipage}{.49\textwidth}
         \begin{flushleft}
@@ -689,7 +673,7 @@
 \newenvironment{ack}{%
     \if@openright\cleardoublepage\else\clearpage\fi
     \zzu@chapter*{\zzu@ackname}
-    \fs\xiaosi[1.524]%仿宋五号，固定行距16磅
+    \songti\xiaosi[1.524]%仿宋五号，固定行距16磅
   }{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%    参考文献环境

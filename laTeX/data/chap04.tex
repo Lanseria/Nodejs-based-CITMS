@@ -6,989 +6,311 @@
 %% Last modified: 2016-08-31 09:43
 %%================================================
 \chapter{系统实现}
-\label{cha:example}
+\label{cha:system-implementation}
 
 系统实现上，我会同样以三大框架大分，每个模块小分的形式，介绍各个模块在实现上的难点与代码解析。并且以开发和部署两大部分粗略讲解。在讲解开发的过程中，我也会逐个分析每个语言和框架的有点与缺点，为什么时代的前进，后面的框架会越来越吸引人去开发。
 
 \section{开发过程}
-\label{sec:figure}
+\label{sec:development-process}
 
-强烈推荐《\LaTeXe 插图指南》！关于子图形的使用细节请参看 \textbf{subfig} 的说
-明文档。
+\subsection{ThinkPHP3.2 框架}
 
-\subsection{\LaTeX~中推荐使用的图片格式}
+首先使用 ThinkPHP 框架之前，你需要安装配置好 PHP 5.6 之上的环境。PHP 环境的配置相较于 Java 和 Nodejs 与略显麻烦的，但是和 C\# 相比就是速度会明显快很多。PHP 的安装配置与其他语言都不太一样，可以直接傻瓜式安装，不论在 Windows 还是 Linux 都需要一个简单的步骤，添加到环境变量。不过如果你是使用 LAMP 等一种开发包去安装，那会十分简单。
 
-在~\LaTeX~中应用最多的图片格式是~EPS（Encapsulated PostScript）格式，它是一种
-专用的打印机描述语言，常用于印刷或打印输出。EPS~格式图片可通过多种方式生成，
-如果使用命令行界面，则可以用 ImageMagick，其可将其它格式图片转换为~EPS~格式图
-片，同时还可以锐化图片，使图片的局部清晰一些。
-
-ImageMagick 包含多个命令行程序,其中最常用的是 \texttt{convert}。\\
-\verb|convert [可选参数] 原文件名.原扩展名 新文件名.eps|
-
-除此之外，一些文字处理软件和科学计算软件也支持生成~EPS~格式的文件，可用“另存
-为”功能查看某款软件是否能够将图片以~EPS~格式的形式保存。
-
-\subsection{插入单幅图形}
-
-插图通常需要占据大块空白，所以在文字处理软件中用户经常需要调整插图的位置。
-\LaTeX~有一个 \texttt{figure} 环境可以自动完成这样的任务，这种自动调整位置的环
-境称作浮动环境(float)，之后还会介绍表格浮动环境。
-
-单张图片插入形式如图~\ref{fig:golfer}~所示。
-\begin{figure}[htbp]
-\centering
-\includegraphics[width = 0.3\textwidth]{golfer}
-\caption{打高尔夫球的人}
-\label{fig:golfer}
-\end{figure}
+一套开发环境 PHP Apache 和 Mysql 配置完毕后，你就可以开始用一些框架开发网站了。这里我使用的是 ThinkPHP，从官方下载框架并解压，得到一下框架目录结构：
 
 \begin{code}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.3\textwidth]{golfer}
-\caption{打高尔夫球的人}
-\label{fig:golfer}
-\end{figure}
+├── index.php           项目入口文件
+├── Application         ThinkPHP 后端 MVC 文件目录
+│   ├── Common          公共函数目录
+│   ├── Home            Home目录
+│   ├── Manager         后台目录
+│   ├── Manager_Detail  后台beta目录
+│   ├── README.md       框架README文件
+│   └── index           
+├── db                  供参考的数据库数据
+├── ThinkPHP            框架系统目录（可以部署在非 web 目录下面）
+├── public              静态文件目录
+│   ├── assets          后台样式
+│   ├── css             样式目录
+│   ├── fonts           字体目录
+│   ├── images          静态图片目录
+│   ├── js              JS 脚本目录
+│   └favicon.png        favicon
+├── README.md
+└── package.json
 \end{code}
 
-上述代码中，\verb|[htbp]| 选项用来指定插图排版的理想位置，这几个字母分别代表
-~here、top、bottom、float page，也就是固定位置、页顶、页尾、单独的浮动页。可
-以使用这几个字母的任意组合，一般不推荐单独使用 \verb|[h]|。如果要强制固定浮动
-图形的位置，还可以用 \textbf{float} 宏包的 \verb|[H]| 选项。
-
-\verb|\centering| 用来使插图居中，\verb|\caption| 命令设置插图标题，\LaTeX~会
-自动给浮动环境的标题加上编号。注意 \verb|label| 应放在 \verb|caption| 之后，否
-则引用时指向的是前一个插图。
-
-\subsection{插入多幅图形}
-
-\subsubsection*{并排摆放，共享标题}
-
-当我们需要两幅图片并排摆放，并共享标题时，可以在 \texttt{figure} 环境中使用两个
-\verb|\includegraphics| 命令，如图~\ref{fig:fanqingfuming}~所示。
+Application 目录下除了 Common 目录是用来存放一些公共配置文件以后，其他目录都是以如下目录结构排列，以代表 ThinkPHP 框架中一定的规范
 
 \begin{code}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.3\textwidth]{qingming}
-\hspace{36pt}
-\includegraphics[width=0.3\textwidth]{fanfu}
-\caption{反清复明}
-\label{fig:fanqingmuming}
-\end{figure}
+├─Common       公共文件
+├─Conf         这个模块的单独配置
+├─Controller   控制器模块
+├─Model        模型模块
+└─View         视图模块
 \end{code}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.3\textwidth]{qingming}
-\hspace{36pt}
-\includegraphics[width=0.3\textwidth]{fanfu}
-\caption{反清复明}
-\label{fig:fanqingfuming}
-\end{figure}
+Common 与 Conf 就不讲了，这类框架与许多框架都十分类似，最重要的一点就是都是 MVC 框架，也就是目录结构中的 Model，Controller，View 三个目录。
 
-\subsubsection*{并排摆放，各有标题}
-
-如果想要两幅并排的图片各有自己的标题，可以在 \texttt{figure} 环境中使用两个
- \texttt{minipage} 环境，每个环境里插入一个图，如图~\ref{fig:qingming}~和
-~\ref{fig:fanfu}~所示。
+先解释下 Model 文件夹，ThinkPHP 是如何与 MySQL 等这类数据库链接数据的呢，Model 的中的 <ModelName>Model.class.php 文件中的写法就很好的解释原因。
 
 \begin{code}
-\begin{figure}[htbp]
-\centering
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{qingming}
-    \caption{清明}
-    \label{fig:qingming}
-\end{minipage}
-\hspace{36pt}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{fanfu}
-    \caption{反复}
-    \label{fig:fanfu}
-\end{minipage}
-\end{figure}
+├─MemberModel.class.php    报名人模块
+├─ProjectModel.class.php   报名项目模块
+└─index.html               空白文件
 \end{code}
 
-\begin{figure}[htbp]
-\centering
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{qingming}
-    \caption{清明}
-    \label{fig:qingming}
-\end{minipage}
-\hspace{36pt}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{fanfu}
-    \caption{反复}
-    \label{fig:fanfu}
-\end{minipage}
-\end{figure}
-
-\subsubsection*{并排摆放，共享标题，各有子标题}
-
-如果想要两幅并排的图片共享一个标题，并各有自己的子标题，可以使用
-\textbf{subfig} 宏包提供的 \verb|\subfloat| 命令，如图~\ref{fig:subfig_a}~和
-~\ref{fig:subfig_b}~所示。
-
-\verb|\subfloat| 命令缺少宽度参数。虽然我们可以用 \verb|\hspace| 命令调整子图
-的距离，子标题却只能和子图本身一样宽，就会出现折行。
-
 \begin{code}
-\begin{figure}[htbp]
-\centering
-\subfloat[清明]{
-    \label{fig:subfig_a}
-    \includegraphics[width=0.3\textwidth]{qingming}
+// MemberModel.class.php File Content
+namespace Home\Model;
+use Think\Model;
+class MemberModel extends Model{
+    protected \$tableName = 'member'; // 对象的数据表
+    protected \$_validate = array( /* 省略... */ );
+    public function insertM(\$pid, /*省略...*/ )
+    { /* 省略... */ }
 }
-\hspace{36pt}
-\subfloat[反复]{
-    \label{fig:subfig_b}
-    \includegraphics[width=0.3\textwidth]{fanfu}
-}
-\caption{反清复明}
-\end{figure}
 \end{code}
 
-每个子图可以有各自的引用，就象这个样子：\ref{fig:subfig_a}、
-\ref{fig:subfig_b}。
-
-\begin{figure}[htbp]
-\centering
-\subfloat[清明]{
-    \label{fig:subfig_a}
-    \includegraphics[width=0.3\textwidth]{qingming}
-}
-\hspace{36pt}
-\subfloat[反复]{
-    \label{fig:subfig_b}
-    \includegraphics[width=0.3\textwidth]{fanfu}
-}
-\caption{反清复明}
-\end{figure}
-
-\subsubsection*{改进的子图方法}
-
-为了避免子标题折行，我们可以在 \verb|\subfloat| 里再嵌套个 \verb|minipage|，因
-为后者是有宽度的，如图~\ref{fig:improved_subfig_a}~和
-~\ref{fig:improved_subfig_b}~所示。
+在 ThinkPHP 中，如果表的形式很复杂，可以使用这种模型文件定义，通过定义其\$tableName 表名，可以很方便的操控其表中的数据。当然如果你的模型或者说表结构很简单，你完全可以在控制器直接写：
 
 \begin{code}
-\begin{figure}[htbp]
-\centering
-\subfloat[清明]{
-\label{fig:improved_subfig_a}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{qingming}
-\end{minipage}
+\$User = new \Home\Model\UserModel();
+\$Info = new \Admin\Model\InfoModel();
+// 带参数实例化
+\$New  = new \Home\Model\NewModel('blog','think_',\$connection);
+\end{code}
+
+在 ThinkPHP 中，可以无需进行任何模型定义。只有在需要封装单独的业务逻辑的时候，模型类才是必须被定义的，因此 ThinkPHP 在模型上有很多的灵活和方便性，让你无需因为表太多而烦恼。
+
+在 MVC 中，除了需要很好的操控数据库那一环，还需要一环去操控视图，也就是这里的 View 视图层。为了不出现代码冗余，通常会利用 HTML 模板引擎去渲染。
+
+\begin{code}
+├─<Directory>   对应控制器的模板文件
+├─layout.html   模板布局
+└─index.html    空白文件
+\end{code}
+
+ThinkPHP的模板引擎内置了布局模板功能支持，可以方便的实现模板布局以及布局嵌套功能。layout.html 文件，默认开启 layout 的情况下，是一个父容器。通常的写法如下：
+
+\begin{code}
+<header>
+</header>
+  {__CONTENT__}
+<footer>
+<footer>
+\end{code}
+
+读取 layout 模板之后，会再解析 <Directory>/<相应的模板>.html 模板文件，并把解析后的内容替换到 layout 布局模板文件的 {CONTENT} 特定字符串。
+
+最后就是控制器，这个 MVC 中，最重要的一环，用来控制模板渲染与数据交互的逻辑。在 ThinkPHP 中，它几乎可以与路由相结合，做到很简单的访问。一般来说，ThinkPHP的控制器是一个类，而操作则是控制器类的一个公共方法。下面就是一个典型的控制器类的定义：
+
+\begin{code}
+<?php
+namespace Home\Controller;
+use Think\Controller;
+class IndexController extends Controller {
+    public function hello(){
+        echo 'hello,thinkphp!';
+    }
 }
-\hspace{36pt}
-\subfloat[反复]{
-\label{fig:improved_subfig_b}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{fanfu}
-\end{minipage}
+\end{code}
+
+Home/IndexController类就代表了 Home 模块下的 Index 控制器，而 hello 操作就是Home/IndexController类的 hello（公共）方法。
+
+当访问 http://serverName/index.php/Home/Index/hello 后会输出：
+
+\begin{code}
+hello,thinkphp!
+\end{code}
+
+通过 display() 等方法，可以让视图与控制器联系起来，再加上 Model 层的操作，ThinkPHP 就可以做到一般网站开发能做的所有事情。
+
+\subsubsection{报名管理系统}
+
+报名管理系统是一个相较于简单的系统，涉及到数据库中，人员 Member 表与活动 Project 表的增删改查。
+
+其中主要的难点还是整个后台的管理上，比如说只有管理员才能进入后台，否则出现跳转，让他以管理员形式登录。
+
+\begin{code}
+if (session('?logineduser')) {
+  // 省略
+  \$this->display();
+} else {
+  // 提示
+  \$this->error('只有管理员才可以进入,请先登录', 'login');
 }
-\caption{反清复明}
-\end{figure}
 \end{code}
 
-\begin{figure}[htbp]
-\centering
-\subfloat[清明]{
-\label{fig:improved_subfig_a}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{qingming}
-\end{minipage}
+还有就是活动的创建中，需要添加图片到后台，这里利用的是 ThinkPHP 自带的图片文件上传 API 来实现对文件上传保存的功能。
+
+\begin{code}
+// 实例化上传类
+\$upload = new \Think\Upload();
+// 设置附件上传大小
+\$upload->maxSize = 3145728;
+// 设置附件上传类型
+\$upload->exts = array('jpg', 'gif', 'png', 'jpeg');
+// 设置附件上传根目录
+\$upload->rootPath = './Public/pic/project1/';
+// 设置附件上传（子）目录
+\$upload->savePath = '';
+ // 上传文件
+\$info = \$upload->upload();
+\end{code}
+
+\subsubsection{考核系统}
+
+考核系统相较于报名系统就复杂许多，首先，它有多种数据需要存储，这也就意味着，你需要建立多张表，同时，每张表之间有着一对多或者一对一的关系，所以，你需要将某些表进行关联。
+
+难点二，你不仅需要做到提交试卷的功能，制作试卷你也需要考虑到出卷人是怎么设计试卷类型的。经过我细致的思考，我总结出一下一套方案去在网页端设计提交出一份试卷。也是处于简单的逻辑考虑。
+
+首先你需要定义一个考试名称吧，还有制定考试的开始时间与结束时间，再加上考试的题型组别，如果可以的话，你可以为你的考试添加上一张个性化的图片，来吸引顾客的目光。一张华丽的图片在设计中是有必要放在某些主题上，充当修饰效果的。
+
+然后，已经进入了这场考试中的组别题型设计，你可以为你的选择题添加一些题目，然后再为你的题目添加几个选项，每个选项的添加都是利用 Ajax 技术去无刷新添加的，可以避免一些无用的数据获取。
+
+在你添加的同时，你可以随时返回题组，添加新的题组，或者在讨论题上新增几个讨论，在选择题中，添加默认的正确答案。最重要的是，当你完成整组试卷的制作，如果你发现问题，你可以在第一时间重新返回题库，进行多次修改。
+
+与此同时，除了选择题，有机器可以帮你判题打分，但是填空题，讨论题是没有这么智能的，所以你需要安排批卷人去审核每套试卷。指定的批卷人可以给定的权限，对每道题进行批改，而且是可以同时批改，可以节约大量时间的。
+
+最后你的试卷的结果分会出现在排行中，你的最终分数将与别人一比高低。
+
+其中试卷的一对多是一个很棘手的问题，当你要获取试卷时，你只能获取一张二维的表格，但是试卷的这个数据结构明显是个树结构，你当然可以想过通过循环去连续获取，不过你根本不知道这张试卷会有多少题型，会有多少题组，更不知道会有多少选择题，每个选择题有多少个选项。所以我们这里利用的是ThinkPHP 提供的关联模型，只需要在 Model 层定义一个简单的 Model 继承自 RelationModel，并在其属性中写上相应关联的表名即可：
+
+\begin{code}
+namespace Home\Model;
+use Think\Model\RelationModel;
+class UserModel extends RelationModel{
+    protected \$_link = array(
+         '关联1'  =>  array(
+             '关联属性1' => '定义',
+         )
+         '关联2'  =>  HAS_ONE, // 快捷定义
+         ...
+    );
 }
-\hspace{36pt}
-\subfloat[反复]{
-\label{fig:improved_subfig_b}
-\begin{minipage}[t]{0.3\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{fanfu}
-\end{minipage}
-}
-\caption{反清复明}
-\end{figure}
-
-\section{表格示例}
-\label{sec:table}
-
-模板中关于表格的宏包有四个：\textbf{tabularx}、\textbf{multirow}、
-%\textbf{slashbox}、\textbf{array}
-\textbf{longtable} 和\textbf{booktabs}。长表格还可以用\textbf{supertabular}，
-可以方便地在表格下方加入脚注。
-
-\subsection{普通表格的绘制方法}
-
-\texttt{table} 环境是一个将表格嵌入文本的浮动环境，其标题和交叉引用的用法类似
-于上一节提到的图形浮动环境 \texttt{figure}。该环境提供了最简单的表格功能。它
-用 \verb|\hline| 命令表示横线，\verb&|& 表示竖线；用 \verb|&| 来分列，用
-\verb|\\| 来换行；每列可以采用居中、居左、居右等横向对齐方式，分别用 \verb|l|
-、\verb|c|、\verb|r| 来表示。
-
-科技文献中常使用三线表格，因此需要调用 \textbf{booktabs} 宏包，三条横线就分别
-用 \verb|\toprule|、\verb|\midrule|、\verb|\bottomrule| 等命令表示。其标准格
-式如表~\ref{table1}~所示。
-
-\begin{table}[htbp]
-\caption{文献类型和标识代码}
-\label{table1}
-\centering
-\begin{tabular}{cccc}
-\toprule
-文献类型 & 标识代码 & 文献类型 & 标识代码\\
-\midrule
-普通图书 & M &  会议录 & C\\
-汇编 & G & 报纸 & N\\
-期刊 & J & 学位论文 & D\\
-报告 & R & 标准 & S\\
-专利 & P & 数据库 & DB\\
-计算机程序 & CP & 电子公告 & EB\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-绘制该表格的代码如下：
-\begin{code}
-\begin{table}[htbp]
-\caption{表格标题}
-\label{标签名}
-\centering
-\begin{tabular}{cc...c}
-\toprule
-表头第1个格   & 表头第2个格   & ... & 表头第n个格  \\
-\midrule
-表中数据(1,1) & 表中数据(1,2) & ... & 表中数据(1,n)\\
-表中数据(2,1) & 表中数据(2,2) & ... & 表中数据(2,n)\\
-...................................................\\
-表中数据(m,1) & 表中数据(m,2) & ... & 表中数据(m,n)\\
-\bottomrule
-\end{tabular}
-\end{table}
 \end{code}
 
-\subsection{长表格的绘制方法}
+\subsubsection{总结}
 
-长表格是当表格在当前页排不下而需要转页接排的情况下所采用的一种表格环境。若长
-表格仍按照普通表格的绘制方法来获得，其所使用的 \verb|table| 浮动环境无法实现
-表格的换页接排功能，表格下方过长部分会排在表格第1页的页脚以下。
+php 与 一些 php 框架搭配的网站开发模式虽然在易用性上大大胜出，学习成本也很低，同时 php 也是基于 C++ 开发的语言，其速度，效率也毋庸置疑，是初学者开始学习编程的良好工具。但是它也有很多不足，比如在构建上你需要同时拥有 Apache 软件或者 Nginx 才能去调试网站，局限性也是突出的一点，php 只能开发一些网站，而手机app，应用，还是前端都是 JavaScript ，所以你必须学会一些前端知识，才能真正地去开发一些网站，最后，也是最关键的一点，虽然有 Composer 包管理工具，但 php 本身并不包含此工具，在代码迁移，或者代码构建时会浪费很多时间和空间。
 
-% \textbf{supertabular} 宏包提供一个 \texttt{supertabular} 环境，是对
-% \texttt{tabular} 环境的扩充。它能不断地计算表格长度，当排版到页面底部时，自动
-% 结束 \texttt{tabular} 环境，而在下一页再自动生成一个新的 \texttt{tabular} 环境
-% ，将剩余表格放入其中。使用该宏包排版长表格时，要用所提供的生成命令专门设计表头
-% ，具体方法如下：
-% 
-% \begin{code}
-% \begin{center}
-% \tablefirsthead{\toprule 表头第1个格 & 表头第2个格 & ... & 表头第n个格\\
-  % \midrule}
-% \tablehead{\multicolumn{n}{c}{表~\thetable（续表）}\\
-  % \toprule 表头第1个格 & 表头第2个格 & ... & 表头第n个格\\ \midrule}
-% \tabletail{\bottomrule
-  % \multicolumn{n}{r}{续下页}\\}
-% \tablelasttail{\bottomrule}
-% \tablecaption{表格标题}\label{标签名}
-% \begin{supertabular}{cc...c}
-% 表中数据(1,1) & 表中数据(1,2) & ... & 表中数据(1,n)\\
-% 表中数据(2,1) & 表中数据(2,2) & ... & 表中数据(2,n)\\
-% ...................................................\\
-% 表中数据(m,1) & 表中数据(m,2) & ... & 表中数据(m,n)\\
-% \end{supertabular}
-% \end{center}
-% \end{code}
-% 
-% \verb|\tablehead| 命令描述的是第2页及其之后各页的标题或表头；
-% \verb|\tablefirsthead| 命令描述的是第1页的标题和表头，若无此命令，则第1页
-% 的表头和标题由 \verb|\tablehead| 命令确定；同理，\verb|\tabletail| 命令描述
-% 的是除最后一页之外每页的表格底部内容；\verb|\tablelasttail| 之前的文字描述的是
-% 最后一页的表格底部内容，若无此命令，则最后一页表格底部内容由 \verb|\tabletail|
-% 命令确定。所绘制的长表格的格式如表~\ref{table2}~所示。
-\begin{longtable}{l@{\hspace{6.5mm}}l@{\hspace{5.5mm}}l}
-\multicolumn{3}{c}{续表~\thetable\hskip1em 中国省级行政单位一览}\\
-\toprule 名称 & 简称 & 省会或首府  \\ \midrule
-\endhead
-\caption{中国省级行政单位一览}
-\label{table2}\\
-\toprule 名称 & 简称 & 省会或首府  \\ \midrule
-\endfirsthead
-\bottomrule
-\multicolumn{3}{r}{续下页}\\
-\endfoot
-\bottomrule
-\endlastfoot
-北京市 & 京 & 北京\\
-天津市 & 津 & 天津\\
-河北省 & 冀 & 石家庄市\\
-山西省 & 晋 & 太原市\\
-内蒙古自治区 & 蒙 & 呼和浩特市\\
-辽宁省 & 辽 & 沈阳市\\
-吉林省 & 吉 & 长春市\\
-黑龙江省 & 黑 & 哈尔滨市\\
-上海市 & 沪/申 & 上海\\
-江苏省 & 苏 & 南京市\\
-浙江省 & 浙 & 杭州市\\
-安徽省 & 皖 & 合肥市\\
-福建省 & 闽 & 福州市\\
-江西省 & 赣 & 南昌市\\
-山东省 & 鲁 & 济南市\\
-河南省 & 豫 & 郑州市\\
-湖北省 & 鄂 & 武汉市\\
-湖南省 & 湘 & 长沙市\\
-广东省 & 粤 & 广州市\\
-广西壮族自治区 & 桂 & 南宁市\\
-海南省 & 琼 & 海口市\\
-重庆市 & 渝 & 重庆\\
-四川省 & 川/蜀 & 成都市\\
-贵州省 & 黔/贵 & 贵阳市\\
-云南省 & 云/滇 & 昆明市\\
-西藏自治区 & 藏 & 拉萨市\\
-陕西省 & 陕/秦 & 西安市\\
-甘肃省 & 甘/陇 & 兰州市\\
-青海省 & 青 & 西宁市\\
-宁夏回族自治区 & 宁 & 银川市\\
-新疆维吾尔自治区 & 新 & 乌鲁木齐市\\
-香港特别行政区 & 港 & 香港\\
-澳门特别行政区 & 澳 & 澳门\\
-台湾省 & 台 & 台北市\\
-北京市 & 京 & 北京\\
-天津市 & 津 & 天津\\
-河北省 & 冀 & 石家庄市\\
-山西省 & 晋 & 太原市\\
-内蒙古自治区 & 蒙 & 呼和浩特市\\
-辽宁省 & 辽 & 沈阳市\\
-吉林省 & 吉 & 长春市\\
-黑龙江省 & 黑 & 哈尔滨市\\
-上海市 & 沪/申 & 上海\\
-江苏省 & 苏 & 南京市\\
-浙江省 & 浙 & 杭州市\\
-安徽省 & 皖 & 合肥市\\
-福建省 & 闽 & 福州市\\
-江西省 & 赣 & 南昌市\\
-山东省 & 鲁 & 济南市\\
-河南省 & 豫 & 郑州市\\
-湖北省 & 鄂 & 武汉市\\
-湖南省 & 湘 & 长沙市\\
-广东省 & 粤 & 广州市\\
-广西壮族自治区 & 桂 & 南宁市\\
-海南省 & 琼 & 海口市\\
-重庆市 & 渝 & 重庆\\
-四川省 & 川/蜀 & 成都市\\
-贵州省 & 黔/贵 & 贵阳市\\
-云南省 & 云/滇 & 昆明市\\
-西藏自治区 & 藏 & 拉萨市\\
-陕西省 & 陕/秦 & 西安市\\
-甘肃省 & 甘/陇 & 兰州市\\
-青海省 & 青 & 西宁市\\
-宁夏回族自治区 & 宁 & 银川市\\
-新疆维吾尔自治区 & 新 & 乌鲁木齐市\\
-香港特别行政区 & 港 & 香港\\
-澳门特别行政区 & 澳 & 澳门\\
-台湾省 & 台 & 台北市\\
-\end{longtable}
-% \begin{center}
-% \tablefirsthead{\toprule 名称 & 简称 & 省会或首府  \\ \midrule}
-% \tablehead{\multicolumn{3}{c}{续表~\thetable\hskip1em 中国省级行政单位一览}\\
-% \toprule 名称 & 简称 & 省会或首府  \\ \midrule}
-% \tabletail{\bottomrule
-% \multicolumn{3}{r}{续下页}\\}
-% \tablelasttail{\bottomrule}
-% \tablecaption{中国省级行政单位一览}
-% \label{table2}
-% \begin{supertabular}{l@{\hspace{6.5mm}}l@{\hspace{5.5mm}}l}
-% 北京市 & 京 & 北京\\
-% 天津市 & 津 & 天津\\
-% 河北省 & 冀 & 石家庄市\\
-% 山西省 & 晋 & 太原市\\
-% 内蒙古自治区 & 蒙 & 呼和浩特市\\
-% 辽宁省 & 辽 & 沈阳市\\
-% 吉林省 & 吉 & 长春市\\
-% 黑龙江省 & 黑 & 哈尔滨市\\
-% 上海市 & 沪/申 & 上海\\
-% 江苏省 & 苏 & 南京市\\
-% 浙江省 & 浙 & 杭州市\\
-% 安徽省 & 皖 & 合肥市\\
-% 福建省 & 闽 & 福州市\\
-% 江西省 & 赣 & 南昌市\\
-% 山东省 & 鲁 & 济南市\\
-% 河南省 & 豫 & 郑州市\\
-% 湖北省 & 鄂 & 武汉市\\
-% 湖南省 & 湘 & 长沙市\\
-% 广东省 & 粤 & 广州市\\
-% 广西壮族自治区 & 桂 & 南宁市\\
-% 海南省 & 琼 & 海口市\\
-% 重庆市 & 渝 & 重庆\\
-% 四川省 & 川/蜀 & 成都市\\
-% 贵州省 & 黔/贵 & 贵阳市\\
-% 云南省 & 云/滇 & 昆明市\\
-% 西藏自治区 & 藏 & 拉萨市\\
-% 陕西省 & 陕/秦 & 西安市\\
-% 甘肃省 & 甘/陇 & 兰州市\\
-% 青海省 & 青 & 西宁市\\
-% 宁夏回族自治区 & 宁 & 银川市\\
-% 新疆维吾尔自治区 & 新 & 乌鲁木齐市\\
-% 香港特别行政区 & 港 & 香港\\
-% 澳门特别行政区 & 澳 & 澳门\\
-% 台湾省 & 台 & 台北市\\
-% \end{supertabular}
-% \end{center}
+\subsection{Express 与 Pug 框架}
 
-表格~\ref{table2}~第~2~页的标题和表头是通过代码自动添加上去的。若表格在页面中
-的竖直位置发生了变化，其在第~2~页及之后各页的标题和表头位置能够始终处于各页的
-最顶部，无需调整。
+相较于 PHP 语言，Express 与 Pug 都是基于 Nodejs 的，所以在安装 Nodejs 上，会方便许多。其次，nodejs 本身自带了 npm 包管理器，在安装第三方库的时候会十分方便。服务器软件的选择上，不用担心，nodejs本身就自带服务器 API，所以你无需安装一些 Apache 或者 Nginx 软件。数据库方面，你完成可以不用数据库，采用 JSON 文本也可以实现简单的数据库的操作。如果你的项目比较大型，Mysql 等关系型数据库和 Mongodb 非关系型数据库都是非常好的选择。
 
-\subsection{列宽可调表格的绘制方法}
+如果你是一名前端开发者，学习 Nodejs 的成本不是很高，你可以在一天内能搭建出一套网站。这也引申除了全栈工程师为什么会在 JavaScript 程序员中特别多的原因。
 
-论文中能用到列宽可调表格的情况共有两种，一种是当插入的表格某一单元格内容过长
-以至于一行放不下的情况，另一种是当对公式中首次出现的物理量符号进行注释的情况
-，这两种情况都需要调用 \textbf{tabularx} 宏包。下面将分别对这两种情况下可调表格的绘制
-方法进行阐述。
+Express.js 框架是一个基于 Nodejs 的 Web 应用程序框架，发布于 2010年11月16日，它被称为 nodejs 中标准的服务器框架。由 TJ 大神开发，并迅速成为流行的 Node 服务器框架。
 
-\subsubsection{表格内某单元格内容过长的情况}
-
-首先给出这种情况下的一个例子如表~\ref{table3}~所示。
-
-\begin{table}[htbp]
-\caption{最小的三个正整数的英文表示法}
-\label{table3}
-\begin{tabularx}{\textwidth}{llX}
-\toprule
-Value & Name & Alternate names, and names for sets of the given size\\
-\midrule
-1 & One & ace, single, singleton, unary, unit, unity\\
-2 & Two & binary, brace, couple, couplet, distich, deuce, double, doubleton, duad, duality, duet, duo, dyad, pair, snake eyes, span, twain, twosome, yoke\\
-3 & Three & deuce-ace, leash, set, tercet, ternary, ternion, terzetto, threesome, tierce, trey, triad, trine, trinity, trio, triplet, troika, hat-trick\\\bottomrule
-\end{tabularx}
-\end{table}
-
-绘制该表格的代码如下：
+Pug.js 是个高性能的模板引擎，受 Haml 的影响很大，前身是 Jade.js 由于商标问题改为 Pug.js。由于它们共同都是 npm 包，也是网站建设的的贡献者，所以两者都很好安装与互用。
 
 \begin{code}
-\begin{table}[htbp]
-\caption{表格标题}
-\label{标签名}
-\begin{tabularx}{\textwidth}{l...X...l}
-\toprule
-表头第1个格   & ... & 表头第X个格   & ... & 表头第n个格  \\
-\midrule
-表中数据(1,1) & ... & 表中数据(1,X) & ... & 表中数据(1,n)\\
-表中数据(2,1) & ... & 表中数据(2,X) & ... & 表中数据(2,n)\\
-.........................................................\\
-表中数据(m,1) & ... & 表中数据(m,X) & ... & 表中数据(m,n)\\
-\bottomrule
-\end{tabularx}
-\end{table}
+npm i express
+npm i pug
 \end{code}
-
-\texttt{tabularx} 环境共有两个必选参数：第1个参数用来确定表格的总宽度，这里取
-为排版表格能达到的最大宽度——正文宽度 \verb|\textwidth|；第2个参数用来确定每列
-格式，其中标为 \verb|X| 的项表示该列的宽度可调，其宽度值由表格总宽度确定。标
-为 \verb|X| 的列一般选为单元格内容过长而无法置于一行的列，这样使得该列内容能
-够根据表格总宽度自动分行。若列格式中存在不止一个 \verb|X| 项，则这些标为
-\verb|X| 的列的列宽相同，因此，一般不将内容较短的列设为 \verb|X| 。标为
-\verb|X| 的列均为左对齐，因此其余列一般选为 \verb|l| （左对齐），这样可使得表格
-美观，但也可以选为 \verb|c| 或 \verb|r|。
-
-\subsubsection{对物理量符号进行注释的情况}
-
-为使得对公式中物理量符号注释的转行与破折号“\pozhehao ”后第一个字对齐，此处最
-好采用表格环境。此表格无任何线条，左对齐，且在破折号处对齐，一共有“式中”二字
-、物理量符号和注释三列，表格的总宽度可选为文本宽度，因此应该采用
-\texttt{tabularx} 环境。由该环境生成的对公式中物理量符号进行注释的公式如式
-(\ref{eq:1})所示。
-
-\begin{equation}
-\label{eq:1}
-\ddot{\bm{\rho}}-\frac{\mu}{R_t^3}\left(3\bm{R_t}\frac{\bm{R_t\rho}}{R_t^2}-\bm{\rho}\right)=\bm{a}
-\end{equation}
-\begin{flushleft}
-\renewcommand\arraystretch{1.25}
-\begin{tabularx}{\textwidth}{@{}>{\normalsize\rm}l@{\quad}>{\normalsize\rm}l@{\pozhehao }>{\normalsize\rm}X@{}}
-式中& $\bm{\rho}$ &追踪飞行器与目标飞行器之间的相对位置矢量；\\
-&  $\ddot{\bm{\rho}}$&追踪飞行器与目标飞行器之间的相对加速度；\\
-&  $\bm{a}$   &推力所产生的加速度；\\
-&  $\bm{R_t}$ & 目标飞行器在惯性坐标系中的位置矢量；\\
-&  $\omega_{t}$ & 目标飞行器的轨道角速度；\\
-&  $\bm{g}$ & 重力加速度，$=\frac{\mu}{R_{t}^{3}}\left(
-3\bm{R_{t}}\frac{\bm{R_{t}\rho}}{R_{t}^{2}}-\bm{\rho}\right)=\omega_{t}^{2}\frac{R_{t}}{p}\left(
-3\bm{R_{t}}\frac{\bm{R_{t}\rho}}{R_{t}^{2}}-\bm{\rho}\right)$，这里~$p$~是目标飞行器的轨道半通径。
-\end{tabularx}\vspace{.5ex}%TODO : 注释内容自动转页接排
-\end{flushleft}
-% 式中\quad
-% \parbox[t][][c]{2em}{
-  % $\ddot{\bm{\rho}}$\\
-  % $\bm{a}$\\
-  % $\bm{R_t}$\\
-  % $\omega_{t}$\\
-% }
-% \parbox[t][][c]{2em}{
-  % \pozhehao\\
-  % \pozhehao\\
-  % \pozhehao\\
-  % \pozhehao\\
-% }
-% \parbox[t][][c]{\textwidth-8em}{
- % 追踪飞行器与目标飞行器之间的相对加速度；\\
- % 推力所产生的加速度；\\
- % 目标飞行器在惯性坐标系中的位置矢量；\\
- % 目标飞行器的轨道角速度；\\}
-
-% 由此方法生成的注释内容应紧邻待注释公式并置于其下方，因此不能将代码放入
-% \texttt{table} 浮动环境中。但此方法不能实现自动转页接排，可能会在当前页剩余空
-% 间不够时，全部移动到下一页而导致当前页出现很大空白。
-
-其中生成注释部分的代码及其说明如下：
-\begin{code}
-\begin{tabularx}{\textwidth}{@{}l@{\quad}l@{\pozhehao}X@{}}
-式中 & symbol-1 & symbol-1的注释内容；\\
-     & symbol-2 & symbol-2的注释内容；\\
-     .............................；\\
-     & symbol-m & symbol-m的注释内容。
-\end{tabularx}
-\end{code}
-
-\texttt{tabularx} 环境的第1个参数为正文宽度，第2个参数里面各个符号的意义为：
-\begin{itemize}
-\item 第1个@{}表示在“式中”二字左侧不插入任何文本，“式中”二字能够在正文中左对
-齐，若无此项，则“式中”二字左侧会留出一定的空白；
-\item \verb|@{\quad}| 表示在“式中”和物理量符号间插入一个空铅宽度的空白；
-\item \verb|@{\pozhehao}| 实现插入破折号的功能；
-\item 第2个 \verb|@{}| 表示在注释内容靠近正文右边界的地方能够实现右对齐。
-\end{itemize}
-
-% 若想获得绘制表格的更多信息，请参见网络上的~Tables in \LaTeXe: Packages and
-% Methods~文档~http://www.tug.org/pracjourn/2007-1/mori/。 
-
-% \begin{table}[htb]
-  % \centering
-  % \begin{minipage}[t]{0.8\linewidth} % 如果想在表格中使用脚注，minipage是个不错的办法
-  % \caption[模板文件]{模板文件。如果表格的标题很长，那么在表格索引中就会很不美
-    % 观，所以要像 chapter 那样在前面用中括号写一个简短的标题。这个标题会出现在索
-    % 引中。}
-  % \label{tab:template-files}
-    % \begin{tabular*}{\linewidth}{lp{10cm}}
-      % \toprule
-      % {\hei 文件名} & {\hei 描述} \\
-      % \midrule
-      % zzuthesis.cls & 模板类文件。\\
-      % zzuthesis.cfg & 模板配置文。\\
-      % thubib.bst    & 参考文献 Bibtex 样式文件。\\
-      % main.tex      & 主文档。\\
-      % Makefile      & Linux 自动处理文件。\footnote{Linux系统自动编译处理。}\\
-      % msmake      & Windows 自动处理文件。\footnote{Windows系统自动编译。}\\
-      % data\textbackslash & 封面、摘要、符号说明、正文章节、简历、致谢等。\\
-      % figures\textbackslash & 文档用到的图片。\\
-      % ref\textbackslash & 参考文献数据库。\\
-      % \bottomrule
-    % \end{tabular*}
-  % \end{minipage}
-% \end{table}
-
-% 表\ref{tab:template-files} 列举了本模板主要文件及其功能，还展示了如何在表格
-% 中正确使用脚注。由于 \LaTeX{} 本身不支持在表格中使用 \verb|\footnote|，所以
-% 不得不将表格放在小页中，而且最好将表格的宽度设置为小页的宽度，这样脚注看起
-% 来才更美观。
-
-% 我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。前面的脚注
-% 是一种不错的方法，如果你不喜欢脚注。那么完全可以在表格后面自己写注释，比如
-% 表~\ref{tab:tabexamp1}。
-
-% \begin{table}[ht]
-  % \centering
-  % \caption{复杂表格示例 1}
-  % \label{tab:tabexamp1}
-  % \begin{minipage}[t]{0.8\textwidth} 
-    % \begin{tabularx}{\linewidth}{|l|X|X|X|X|}
-      % \hline
- % \multirow{2}*{\backslashbox{x}{y}}  & \multicolumn{2}{c|}{First Half} & \multicolumn{2}{c|}{Second Half}\\\cline{2-5}
-      % & 1st Qtr &2nd Qtr&3rd Qtr&4th Qtr \\ \hline
-      % East$^{*}$ &   20.4&   27.4&   90&     20.4 \\
-      % West$^{**}$ &   30.6 &   38.6 &   34.6 &  31.6 \\ \hline
-    % \end{tabularx}\\[2pt]
-    % \footnotesize 注：数据来源《\zzuthesis{} 使用手册》。\\
-    % *：东部\\
-    % **：西部
-  % \end{minipage}
-% \end{table}
-
-% 此外，表~\ref{tab:tabexamp1} 同时还演示了另外两个功能：1）通过
-% \textbf{tabularx} 的\texttt{|X|} 扩展实现表格自动放大；2）通过命令
-% \verb|\backslashbox| 在表头部分插入反斜线。
-
-% 浮动体的并排放置一般有两种情况：1）二者没有关系，为两个独立的浮动体；2）二
-% 者隶属于同一个浮动体。对表格来说并排表格既可以像表~\ref{tab:parallel1}、表
-% ~\ref{tab:parallel2} 使用小页环境，也可以如表~\ref{tab:subtable} 使用子表格
-% 来做。
-
-% \begin{table}[ht]
-% \noindent\begin{minipage}{0.5\textwidth}
-% \centering
-% \caption{第一个并排子表格}
-% \label{tab:parallel1}
-% \begin{tabular}{p{2cm}p{2cm}}
-% \toprule[1.5pt]
-% 111 & 222 \\\midrule[1pt]
-% 222 & 333 \\\bottomrule[1.5pt]
-% \end{tabular}
-% \end{minipage}
-% \begin{minipage}{0.5\textwidth}
-% \centering
-% \caption{第二个并排子表格}
-% \label{tab:parallel2}
-% \begin{tabular}{p{2cm}p{2cm}}
-% \toprule[1.5pt]
-% 111 & 222 \\\midrule[1pt]
-% 222 & 333 \\\bottomrule[1.5pt]
-% \end{tabular}
-% \end{minipage}
-% \end{table}
-
-% \begin{table}
-% \centering
-% \caption{并排子表格}
-% \label{tab:subtable}
-% \subfloat[第一个子表格]{
-% \begin{tabular}{p{2cm}p{2cm}}
-% \toprule[1.5pt]
-% 111 & 222 \\\midrule[1pt]
-% 222 & 333 \\\bottomrule[1.5pt]
-% \end{tabular}}\hskip2cm
-% \subfloat[第二个子表格]{
-% \begin{tabular}{p{2cm}p{2cm}}
-% \toprule[1.5pt]
-% 111 & 222 \\\midrule[1pt]
-% 222 & 333 \\\bottomrule[1.5pt]
-% \end{tabular}}
-% \end{table}
-
-% 有的同学不想让某个表格或者图片出现在索引里面，那么请使用命令
-% \verb|\caption*{}|，这个命令不会给表格编号，也就是出来的只有标题文字而没有“表
-% ~XX”，“图~XX”，否则索引里面序号不连续就显得不伦不类，这也是 \LaTeX{} 里星号命
-% 令默认的规则。
-% 
-% \begin{table}[ht]
-% \centering
-  % \begin{minipage}{0.45\linewidth}
-  % \centering
-  % \caption*{表~1.111\hskip1em 这是一个手动编号，不出现在索引中的表格。}
-  % \label{tab:badtabular}
-  % \begin{picture}(150,50)
-    % \framebox(150,50)[c]{\zzuthesis}
-  % \end{picture}    
-  % \end{minipage}\hfill
-  % \begin{minipage}{0.45\linewidth}
-  % \centering
-  % \begin{picture}(150,50)
-    % \framebox(150,50)[c]{薛瑞尼}
-  % \end{picture}
-  % \caption*{Figure~1.111\hskip1em 这是一个手动编号，不出现在索引中的图。}
-  % \label{tab:badfigure}
-  % \end{minipage}
-% \end{table}
-% 
-
-\subsection{小页中的脚注}
-
-关于小页中的脚注，请看下面的例子：
- 
-\begin{minipage}[t]{\linewidth-2\parindent}
-柳宗元，字子厚（773-819），河东（今永济县）人\footnote{山西永济水饺。}，是唐
-代杰出的文学家，哲学家，同时也是一位政治改革家。与韩愈共同倡导唐代古文运动，
-并称韩柳\footnote{唐宋八大家之首二位。}。
-\end{minipage}\\[-5pt]
-
-\section{数学公式示例}
-\label{sec:equation}
-
-\LaTeX{} 的数学公式有两种形式：行间（inline）模式和独立（display）模式。前者是
-指在正文中插入数学内容；后者独立排列，可以有或者没有编号。行间公式和无编号独立
-公式都有多种输入方法，一般行间公式用 \verb|$|\ldots \verb|$|，无编号独立公式用
-\verb|\[|\ldots \verb|\]|。有编号独立公式则需要用 \texttt{equation} 环境。
-
-注意一下公式显示模式的不同，这个公式为行间模式：
-$\lim_{n \to \infty} \sum_{k=1}^n \frac{1}{k^2} = \frac{\pi^2}{6}$；下面的公式
-是独立模式：
-\[\lim_{n \to \infty} \sum_{k=1}^n \frac{1}{k^2} = \frac{\pi^2}{6}\]
-
-\subsection{多行公式}
-
-\textbf{amsmath} 宏包提供了额外的行间独立（display）公式的结构，主要用于一个
-公式太长一行放不下，或几个公式需要写成一组的情况，该宏包主要提供以下几个环境
-：
-\begin{center}
-\begin{tabular}[c]{ccccccc}
-equation & equation* & align & align* & gather & gather* & split \\
-flalign & flalign* & multline & multline* & alignat & alignat* & \\
-\end{tabular}
-\end{center}
-
-除了 \texttt{split} 外，其余环境均提供带*的版本，不生成公式编号。
-
-% \subsection{矩阵}
-% 
-% 数学模式下可以用 \verb|array| 环境来生成矩阵，它提供了外部对齐和列对齐的控制参
-% 数。外部对齐是指整个矩阵和周围对象的纵向关系，有三种方式:居顶、居中 (缺省) 、
-% 居底，分别用 \verb|l、c、r| 来表示；列对齐也有三种方式:居左、居中、居右，分别
-% 用 \verb|l、c、r| 表示。\verb|\\| 和 \verb|&| 用来分隔行和列。
-% 
-% \[\begin{array}{ccc}
-% x_1 & x_2 & \dots \\
-% x_3 & x_4 & \dots \\
-% \vdots & \vdots & \ddots \\
-% \end{array}\]
-
-% \verb|amsmath| 有几个类似的环境：\verb|pmatrix、bmatrix、Bmatrix、vmatrix|~和~
-% \verb|Vmatrix|，它们和 \verb|array| 的主要区别是会在表两端加上~$()\; []\;
-% \{\}\; ||\; \|\|$~等分隔符，其次这些环境没有列对齐方式参数。
-% 
-% 行间公式可以用 \verb|smallmatrix| 环境来生成排列紧密的小矩阵，如
-% $(\begin{smallmatrix} a&b\\c&d \end{smallmatrix})$。
-% 
-
-\subsubsection{长公式}
-
-对于多行不需要对齐的长公式，我们可以用 \texttt{multline} 环境。
-\begin{multline}
-\framebox[.65\columnwidth]{A}\\
-\framebox[.5\columnwidth]{B}\\
-\shoveright{\framebox[.5\columnwidth]{C}}\\
-\framebox[.65\columnwidth]{D}
-\end{multline}
-
-其代码如下：
-\begin{code}
-\begin{multline}
-\framebox[.65\columnwidth]{A}\\
-\framebox[.5\columnwidth]{B}\\
-\shoveright{\framebox[.tt\columnwidth]{C}}\\
-\framebox[.65\columnwidth]{D}
-\end{multline}
-\end{code}
-
-\texttt{multline} 环境用于单行放不下的长公式，其第一行及最后一行分别居左、居右
-对齐，两端均缩进距离 \verb|\multlinegap|；其它行则默认居中排布，但可以用个命令
-\verb|\shoveleft|、\verb|\shoveright| 分别使居左或居右排布。
-
-需要对齐的长公式可以用 \texttt{split} 环境，它本身不能单独使用，因此也称作次环境
-，必须包含在 \texttt{equation} 或其它数学环境内。\texttt{split} 环境用 \verb|\\| 
-和 \verb|&| 来分行和设置对齐位置。
-\begin{equation}
-\begin{split}
-H_c&=\frac{1}{2n} \sum^n_{l=0}(-1)^{l}(n-{l})^{p-2}
-\sum_{l _1+\dots+ l _p=l}\prod^p_{i=1} \binom{n_i}{l _i}\\
-&\quad\cdot[(n-l)-(n_i-l_i)]^{n_i-l_i}\cdot
-\Bigl[(n-l)^2-\sum^p_{j=1}(n_i-l_i)^2\Bigr].
-\end{split}
-\label{eqn:barwq}
-\end{equation}
-
-\subsubsection{公式组}
-
-不需要对齐的公式组用 \texttt{gather} 环境，该环境中的公式均居中排布，各公式间用
-\verb|\\| 分开；需要对齐的用 \texttt{align}，在该环境中使用 \verb|\text| 命令可
-以生成对单独公式的注释。
-\begin{gather}
-  first equation\\
-  \begin{split}
-    second & equation\\
-           & on twolines
-  \end{split}
-\end{gather}
-
-\begin{align}
- x & = y_1-y_2+y_3-y_5+y_8-\dots && \text{by \eqref{eqn:barwq}}\\
-   & = y'\circ y^*               && \text{by \eqref{eqn:barwq}}\\
-   & = y(0) y'                   && \text{by Axiom 1.}
-\end{align}
-
-就像单独的行间公式一样，使用 \texttt{gather}、\texttt{align} 和
-\texttt{alignat} 环境生成的公式组中的每个公式也都是占据整个文本的宽度，因此
-这样的公式组两侧不能再添加其它内容，比如大括号等。不过相应地用
-\texttt{gathered}、\texttt{aligned} 和 \texttt{alignedat} 环境则生成仅占据
-实际公式宽度的公式组。
-\begin{equation*}
-\left. \begin{aligned}
-  \bm{B'}&=-\bm{\partial}\times \bm{E},\\
-  \bm{E'}&=\bm{\partial}\times \bm{B} - 4\pi j,
-\end{aligned}
-\right\}
-\qquad \text{Maxwell's equations}
-\end{equation*}
-
-有多种条件的公式组用 \texttt{cases} 次环境。
-\[ P_{r-j}=\begin{cases}
-  0& \text{if $r-j$ is odd},\\
-  r!\,(-1)^{(r-j)/2}& \text{if $r-j$ is even}.
-\end{cases} \]
-
-这里仅简单介绍了 \textbf{amsmath} 的功能，更详尽的说明可参见该宏包的文档。
-
-\subsection{定理和证明}
-
-\zzuthesis{} 定义了常用的数学环境：
-\begin{center}
-\begin{tabular}{*{7}{l}}\hline
-  axiom & theorem & definition & proposition & lemma & conjecture &\\
-  公理 & 定理 & 定义 & 命题 & 引理 & 猜想 &\\\hline
-  proof & corollary & example & exercise & assumption & remark & problem \\
-  证明 & 推论 & 例子& 练习 & 假设 & 注释 & 问题\\\hline
-\end{tabular}
-\end{center}
-
-以上环境的定义采用 \textbf{amsthm} 宏包提供的 \verb|\newtheorem| 命令，其语法
-如下：
 
 \begin{code}
-\newtheorem{环境名}[编号延续]{显示名}[编号层次]
+app.set('view engine', 'pug');
 \end{code}
 
-% 下面的代码定义了四个环境：定义、定理、引理和推论，它们都在一个 \verb|chapter| 
-% 内编号，而引理和推论会延续定理的编号。
-% \begin{code}
-% \newtheorem{definition}{定义}[chapter]
-% \newtheorem{theorem}{定理}[chapter]
-% \newtheorem{lemma}{引理}[chapter]
-% \newtheorem{corollary}[theorem]{推论}
-% \end{code}
-% 
-% 定义了上述环境之后，我们就可以象下面这样使用它们。
-下面是应用示例：
-\begin{definition}
-Java是一种跨平台的编程语言。
-\end{definition}
+只需要简单的几句可以方便地使用 pug 语法来编写 Html 模板。
 
-\begin{theorem}
-咖啡因会使人的大脑兴奋。
-\end{theorem}
+\begin{code}
+├─controllers   控制器
+├─models        模型
+├─schemas       表结构
+└─views         视图层
+    ├─includes  视图中的小插件
+    └─pages     视图中的页面
+\end{code}
 
-\begin{lemma}
-茶和咖啡都会使人兴奋。
-\end{lemma}
+用 Expressjs 搭建的网站目录结构也类似 PHP，采用 MVC 的框架，不过不同的是，我这里用的是非关系型数据库 Mongo，利用 schema 就可以在应用初始化时帮你创建好一些列表结构，这相当于你的数据库与应用也绑定在了一块，十分方便。
 
-\begin{corollary}
-晚上喝咖啡会导致失眠。
-\end{corollary}
+\subsection{短信群发平台}
 
-\texttt{proof} 环境可以用来输入下面这样的证明，它会在证明结尾输入一个~QED~符号
-\footnote{拉丁语~quod erat demonstrandum~的缩写。}。
+短信群发平台主要是以发送短信为核心。不过发送一个短信并没有你用手机发送这么简单，你需要一个类似通信服务商发送短信的 API，只要得知对方的手机号，和发送内容就可以发送。这需要代码去完成，所以我利用了阿里大于的短信 API 去完成这一部分内容。他们提供了一整套的 API 类似于通信服务商一样的内容，你可以语音，短信，验证码等等一系列内容。
 
-\begin{proof}[命题“物质无限可分”的证明]
-一尺之棰，日取其半，万世不竭。
-\end{proof}
+下载阿里大于关于 Nodejs 的 SDK，稍加改装就可以实现简单的发送短信的功能。由于要写的群发短信的功能，这里就要考虑到一些语言会碰到的阻塞性问题，发送一条短信，你需要等阿里大于的服务器返回的结果，然后再去发送，这样会慢许多，通常用异步去解决这类问题。不过 Nodejs 几乎不需要考虑这类情况，Nodejs 本身就是单线程异步的，利用 JavaScript 的回调函数或者 Promise 写法，或者更高级的 Async/await 写法，就可以流畅地去使用异步与同步。 
 
-% \begin{theorem}
-% 如果函数$f(x)$满足
-% \begin{enumerate}
-% \item 在闭区间$[a,b]$上连续；
-% \item 在开区间$(a,b)$内可导；
-% \item 在区间端点处的函数值相等，即$f(a)=f(b)$，
-% \end{enumerate}
-% 那么在$(a,b)$内至少有一点$\xi(a<\xi<b)$，使得$f^\prime(\xi)=0$。这个定理称之为%
-% \textbf{罗尔定理}。
-% \label{the:rolle}
-% \end{theorem}
-% 
-% 贝叶斯公式如式~(\ref{equ:bayes})，其中 $p(y|\mathbf{x})$ 为后验；
-% $p(\mathbf{x})$ 为先验；分母 $p(\mathbf{x})$ 为归一化因子。
-% \begin{equation}
-% \label{equ:bayes}
-% p(y|\mathbf{x}) = \frac{p(\mathbf{x},y)}{p(\mathbf{x})}=
-% \frac{p(\mathbf{x}|y)p(y)}{p(\mathbf{x})} 
-% \end{equation}
-% 
-% 再看一个 \textbf{amsmath} 的例子：
-% \newcommand{\envert}[1]{\left\lvert#1\right\rvert} 
-% \begin{equation}\label{detK2}
-% \det\mathbf{K}(t=1,t_1,\dots,t_n)=\sum_{I\in\mathbf{n}}(-1)^{\envert{I}}
-% \prod_{i\in I}t_i\prod_{j\in I}(D_j+\lambda_jt_j)\det\mathbf{A}
-% ^{(\lambda)}(\overline{I}|\overline{I})=0.
-% \end{equation} 
-% 
-% 多级规划的例子：
-% \begin{equation}\label{bilevel}
-% \left\{\begin{array}{l}
-% \max\limits_{{\mbox{\footnotesize\boldmath $x$}}} F(x,y_1^*,y_2^*,\cdots,y_m^*)\\[0.2cm]
-% \mbox{subject to:}\\[0.1cm]
-% \qquad G(x)\le 0\\[0.1cm]
-% \qquad(y_1^*,y_2^*,\cdots,y_m^*)\mbox{ solves problems }(i=1,2,\cdots,m)\\[0.1cm]
-% \qquad\left\{\begin{array}{l}
-    % \max\limits_{{\mbox{\footnotesize\boldmath $y_i$}}}f_i(x,y_1,y_2,\cdots,y_m)\\[0.2cm]
-    % \mbox{subject to:}\\[0.1cm]
-    % \qquad g_i(x,y_1,y_2,\cdots,y_m)\le 0.
-    % \end{array}\right.
-% \end{array}\right.
-% \end{equation}
-% 
-% \begin{theorem}
-% 设$f:[a,b]\rightarrow \mathbf R$为一连续函数，$g:[a,b]\rightarrow \mathbf R$为
-% 一正的可积函数，那么存在一点$\xi\in [a,b]$使得：
-% \[\int_a^b f(x)g(x)\,dx= f(\xi)\int_a^b g(x)\,dx\]
-% \end{theorem}
-% 
-% \begin{proof}
-% 
-% 因为f是闭区间上的连续函数，f取得最大值M和最小值m。于是：
-% \[mg(x)\leq f(x)g(x)\leq Mg(x)\]
-% 
-% 对不等式求积分，我们有：
-% \[m\int_a^b g(x)\,dx\leq \int_a^b f(x)g(x)\,dx \leq M\int_a^b
-% g(x)\,dx\]
-% 若$\int_a^b g(x)\,dx=0$，则$\int_a^b f(x)g(x)\,dx=0$，$\xi$可取$[a,b]$上任一点
-% 。
-% 
-% 设 $\int_a^b g(x)\,dx>0$，那么：
-% \[m\leq \frac{\int_a^b f(x)g(x)\,dx}{\int_a^b g(x)\,dx}\leq M\]
-% 
-% 因为 $m\leq f(x)\leq M$是连续函数，则必存在一点 $\xi\in [a,b]$，使得：
-% \begin{equation}
-% f(\xi)= \frac{\int_a^b f(x)g(x)\,dx}{\int_a^b g(x)\,dx}
-% \label{eqn:lagrange1}
-% \end{equation}
-% \end{proof}
-% 
-% \begin{corollary}
-% 在式~\ref{eqn:lagrange1}中令$g(x)=1$，则可得出：
-% 
-% 设$f:[a,b]\rightarrow \mathbf R$为一连续函数，则$\exists\xi\in [a,b]$，使：
-% \begin{equation}
-% f(\xi)= \frac{\int_a^b f(x)\,dx}{b-a}
-% \label{eqn:lagrange2}
-% \end{equation}
-% \end{corollary}
-% 
-% \begin{example}
-  % 大家来看这个例子。
-% \begin{equation}
-% \label{ktc}
-% \left\{\begin{array}{l}
-% \nabla f({\mbox{\boldmath $x$}}^*)-\sum\limits_{j=1}^p\lambda_j\nabla g_j({\mbox{\boldmath $x$}}^*)=0\\[0.3cm]
-% \lambda_jg_j({\mbox{\boldmath $x$}}^*)=0,\quad j=1,2,\cdots,p\\[0.2cm]
-% \lambda_j\ge 0,\quad j=1,2,\cdots,p.
-% \end{array}\right.
-% \end{equation}
-% \end{example}
-% 
-% \begin{exercise}
-% 请列出 Andrew S. Tanenbaum 和 W. Richard Stevens 的所有著作。
-% \end{exercise}
-% 
-% \begin{conjecture}
-% \textit{Poincare Conjecture} If in a closed three-dimensional space, any
-% closed curves can shrink to a point continuously, this space can be deformed
-% to a sphere.
-% \end{conjecture}
-% 
-% \begin{problem}
- % 回答还是不回答，是个问题。 
-% \end{problem}
+\subsection{排值班系统}
+
+排值班系统主要是用学生的课表，根据有课无课，或者说有空与没空去安排人员。举一个比较简单的例子，一个社团需要招新了，他们已经有很多成员，成员们也愿意将他们的没课的时间去参加招新的时间上去。一般招新的时间点无非是上午第一大节，第二大节，中午，下午的第三大节，第四大节。所以具体算法就是，先将大家的无课表，记录在一个统一的课表上，然后根据配置，每个值班时间点需要多少人手。按照多劳少排的规则去安排每个人。
+
+\subsection{学习平台}
+
+这里的学习平台主要是为了督促学习用，我在各个平台抓取每个网站的课程信息，写在自己的 Mongo 数据库中，人员信息从报名系统中提取，两者结合就可以实现学习进度情况。除了有爬虫的功能，同时也加入了 NodeBB 论坛，用于学员之类的讨论。社团的通知等等。
+
+\subsection{Vue 与 Koa 前后端分离}
+
+之前讲的 MVC 不管是 PHP 实现还是 Nodejs 实现，都是 Web1.0 的思想，而真正需要发展的，而且目前大公司都在用的都是前后端分离的。后端不用操心前端的事，前端不用管数据安全，服务是如何运行。他们各司其职，它们之间唯一的联系就是 API，后端提供 API 的使用方法，前端用这套 API 去调用即可。一切就变得简单许多，你甚至可以将这套 API 用在各个地方，比如部分开放给公众，用于公开数据，利用大数据的分析，部分可以与手机APP，微信小程序共用。
+
+其中 Vue.js 是国人开发的一款足以与 FaceBook 开发的 React 媲美的前端框架，它简单易于上手，也同样具有庞大的第三方库的支持，甚至有 Gitlab 等一些著名的项目都是基于 Vue 创建的。
+
+Koa.js 是 Tj 大神的另一开山大作，从 2.0 开始 Koa 放弃了老旧的 co.js 依赖，转而支持新技术来保持它异步的功能。你可以看到 Koa2.0 代码十分简单，短小，精悍，它只保留属于服务器的功能，其他功能都通过第三方库来扩建。使开发变得简单高效。
+
+\begin{code}
+├─client        前端
+│   ├─dist   生产文件
+│   └─src    核心文件
+└─server        后端
+    ├─dist   生产文件
+    └─src    核心文件
+\end{code}
+
+可以看到在目录构建上，已经将其分别前端与后端两部分，这样能很好的专注于某一部分的开发。
+
+\subsubsection{邮件发送平台}
+
+邮件发送平台主要用于发送邮件，只靠前端是不能完成的，前端只是提供友好的界面，将用户的数据包装发送给后端，后端接收之后，将数据匹配至相应的 API，我这里利用的是 nodemailer 第三方插件，通过邮箱的配置，就可以轻松的发送邮件。
+
+\section{部署过程}
+
+\subsection{Docker 安装}
+
+在 Linux 中安装 Docker 很方便，只要下载对应脚本就可以自动进行安装，同时为了方便使用，在 docker 命令之前不用加上 sudo，你可以将 docker 加入相应的用户组。
+
+此时，Docker 已安装好，如果需要暂停或者启动只需用 systemctl 来启用它即可。当然为了用于 docker-compose 你还需要安装 docker-compose 来实现一键化部署。
+
+\subsection{Docker 配置}
+
+与其说是 docker 配置，还不如说是 docker-compose.yml 文件的配置：
+
+\begin{code}
+# 基于 php 这个版本的容器
+FROM php:5.6-apache
+# 工作目录设定
+WORKDIR /var/www/html
+# 安装 php 额外的扩展
+RUN docker-php-ext-install pdo pdo_mysql
+# 开放 80 端口
+EXPOSE 80
+# 最后执行 apache
+CMD apache2-foreground
+\end{code}
+
+\begin{code}
+version: '2'
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql_es
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: es
+    volumes:
+      - ./db/es.sql:/docker-entrypoint-initdb.d/1.es.sql
+  web:
+    build: .
+    container_name: web_es
+    links:
+      - mysql
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+\end{code}
+
+这是关于 php 的环境搭建，compose 利用的是两个 docker 容器，容器之间通过端口连接，一个容器通过 Dockerfile 文件定义，另一个是 mysql 容器，是使用官方的。最后只需要一个简单的命令就可以很快的启动，当然这不包括镜像的下载与安装。
 
