@@ -202,10 +202,10 @@
   \let\@evenfoot=\@oddfoot}
 \def\ps@zzu@headings{%%Centred head, centred page number in foot.
   \def\@oddhead{\vbox to\headheight{%
-    \hb@xt@\textwidth{\wuhao\rmfamily\hfill\leftmark\hfill}%
+    \hb@xt@\textwidth{\wuhao\rmfamily\hfill\zzu@ctitle\hfill}%
       \vskip\tw@\p@\hbox{\vrule width\textwidth height.4\p@ depth\z@}}}
   \let\@evenhead=\@oddhead
-  \def\@oddfoot{\wuhao\hfil\thepage\ifzzu@bachelor\relax\else\hfil\fi}
+  \def\@oddfoot{\wuhao\hfil\thepage\ifzzu@bachelor\hfil\else\hfil\fi}
   \let\@evenfoot=\@oddfoot}
 \renewcommand{\chaptermark}[1]{\@mkboth{\@chapapp\  ~~#1}{}}
 \def\zzu@item@space{%列表环境间距
