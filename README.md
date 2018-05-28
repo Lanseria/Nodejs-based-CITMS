@@ -20,7 +20,6 @@
 1. ⭕[系统实现](./04-系统实现.md)
 1. ⭕[致谢](./05-致谢.md)
 1. ⭕[参考文献](./06-参考文献.md)
-1. ⭕[附录](./07-附录.md)
 1. ⭕[PPT](https://github.com/Lanseria/Nodejs-based-CITMS/releases/download/v0.1/show.pptx)
 1. ⭕[视频](https://www.bilibili.com/video/av23434110/)
 
